@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -20,9 +21,15 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] GameObject Player;
     [SerializeField] GameObject lamp;
 
+    //public Transform[] objectsToRotate;
+    //public NavMeshSurface[] surfaces;
+
     bool firstTime = true;
     int MaxRadio = 8;
     int CountRadio = 0;
+
+
+    //[SerializeField] NavigationBaker baker;
 
     private void Start()
     {
@@ -32,8 +39,8 @@ public class MazeGenerator : MonoBehaviour
     IEnumerator GeneratMaze(Vector2Int size)
     {
         List<MazeNode> nodes = new List<MazeNode>();
-        
 
+        
         //create nodes
         for (int x = 0; x < size.x; x++)
         {
@@ -42,16 +49,18 @@ public class MazeGenerator : MonoBehaviour
                 
                 Vector3 nodePos = new Vector3(x - (size.x / 2f), 0, y - (size.y / 2f));// spawns node in center
                 MazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
-                if (Random.Range(1, 5) == 3)
-                {
-                    Instantiate(lamp, new Vector3(nodePos.x, nodePos.y+0.45f, nodePos.z), Quaternion.Euler(0, 0, 180), transform);
-                }
+                //if (Random.Range(1, 5) == 3)
+                //{
+                //    Instantiate(lamp, new Vector3(nodePos.x, nodePos.y+0.45f, nodePos.z), Quaternion.Euler(0, 0, 180), transform);
+                //}
 
                 nodes.Add(newNode);
                 
                 yield return null;
             }
         }
+        
+        
 
         List<MazeNode> currentPathNode = new List<MazeNode>();
         
@@ -179,6 +188,8 @@ public class MazeGenerator : MonoBehaviour
                                 currentPathNode[currentPathNode.Count - 1].transform.position.z+0.3f), 
                                 Quaternion.Euler(-90, 0, -30)
                             );
+
+                       
                         CountRadio += 1;
                     }
                     
@@ -198,6 +209,8 @@ public class MazeGenerator : MonoBehaviour
 
             currentNodeXTEXT.text = currentNodeX.ToString();
             currentNodeYTEXT.text = currentNodeY.ToString();
+
+            
 
             
 
