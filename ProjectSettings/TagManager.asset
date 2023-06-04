@@ -6,6 +6,7 @@ TagManager:
   tags:
   - cells
   - floor
+  - centre
   layers:
   - Default
   - TransparentFX

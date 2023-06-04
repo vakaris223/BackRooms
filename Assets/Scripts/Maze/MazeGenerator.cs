@@ -21,8 +21,10 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] GameObject Player;
     [SerializeField] GameObject lamp;
 
+    [SerializeField] GameObject floor;
+    [SerializeField] GameObject monster;
+
     //public Transform[] objectsToRotate;
-    //public NavMeshSurface[] surfaces;
 
     bool firstTime = true;
     int MaxRadio = 8;
@@ -33,7 +35,12 @@ public class MazeGenerator : MonoBehaviour
 
     private void Start()
     {
+        //create floor and build navMesh
+        floor.transform.localScale = new Vector3(mazeSize.x, 0.1f, mazeSize.y);
+        floor.transform.position = new Vector3(-0.5f,-0.5f,-0.5f);
+        floor.GetComponent<NavMeshSurface>().BuildNavMesh();
         StartCoroutine(GeneratMaze(mazeSize));
+
     }
 
     IEnumerator GeneratMaze(Vector2Int size)
@@ -60,7 +67,7 @@ public class MazeGenerator : MonoBehaviour
             }
         }
         
-        
+         Instantiate(monster,  new Vector3(-0.5f,0.5f,-0.5f), Quaternion.identity);
 
         List<MazeNode> currentPathNode = new List<MazeNode>();
         
@@ -69,8 +76,10 @@ public class MazeGenerator : MonoBehaviour
 
         //choose starting node
         currentPathNode.Add(nodes[Random.Range(0, nodes.Count)]);
-        currentPathNode[0].SetState(NodeState.Current);
+        //currentPathNode[0].SetState(NodeState.Current);
         Instantiate(Player, currentPathNode[0].transform.position, Quaternion.identity);
+
+       
 
         while (completedNodes.Count < nodes.Count)
         {
@@ -162,7 +171,7 @@ public class MazeGenerator : MonoBehaviour
 
                 currentPathNode.Add(chosenNode);
 
-                chosenNode.SetState(NodeState.Current);
+                //chosenNode.SetState(NodeState.Current);
                 firstTime = true;
             }
             else
@@ -170,28 +179,28 @@ public class MazeGenerator : MonoBehaviour
                 
                 completedNodes.Add(currentPathNode[currentPathNode.Count - 1]);
 
-                currentPathNode[currentPathNode.Count - 1].SetState(NodeState.Completed);
+                //currentPathNode[currentPathNode.Count - 1].SetState(NodeState.Completed);
 
 
                 if(firstTime)
                 {
                     int randomNumber = Random.Range(1, 5);
 
+
                     if(randomNumber == 2)
                     {
                         Instantiate
-                            (
+                        (
                                 radio, 
                                 new Vector3
                                 (currentPathNode[currentPathNode.Count - 1].transform.position.x-0.3f,
                                 currentPathNode[currentPathNode.Count - 1].transform.position.y-0.45f,
                                 currentPathNode[currentPathNode.Count - 1].transform.position.z+0.3f), 
                                 Quaternion.Euler(-90, 0, -30)
-                            );
-
-                       
+                        );
                         CountRadio += 1;
                     }
+                    
                     
                     
                     firstTime = false;

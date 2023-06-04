@@ -13,7 +13,7 @@ public class MazeNode : MonoBehaviour
 {
     [SerializeField] GameObject[] walls;
     [SerializeField] MeshRenderer floor;
-    [SerializeField] Material floorMat;
+    //[SerializeField] Material floorMat;
     [SerializeField] GameObject lamp;
 
     public void RemoveWall(int wallToRemove)
@@ -26,21 +26,21 @@ public class MazeNode : MonoBehaviour
         Instantiate(lamp, pos, Quaternion.Euler(0, 0, 180));
     }
 
-    public void SetState(NodeState state)
-    {
-        switch (state)
-        {
-            case NodeState.Available:
-                floor.material.color = Color.white;
-                break;
-            case NodeState.Current:
-                floor.material.color = Color.yellow;
-                break;
-            case NodeState.Completed:
-                floor.material = floorMat;
-                break;
-            default:
-                break;
-        }
-    }
+    // public void SetState(NodeState state)
+    // {
+    //     switch (state)
+    //     {
+    //         case NodeState.Available:
+    //             floor.material.color = Color.white;
+    //             break;
+    //         case NodeState.Current:
+    //             floor.material.color = Color.yellow;
+    //             break;
+    //         case NodeState.Completed:
+    //             floor.material = floorMat;
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 }
