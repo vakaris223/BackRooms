@@ -10,26 +10,37 @@ public class RandomMovement : MonoBehaviour //don't forget to change the script 
     public float range; //radius of sphere
 
     public Transform centrePoint; //centre of the area the agent wants to move around in
+    public GameObject player; //centre of the area the agent wants to move around in
+    public float distance;
     //instead of centrePoint you can set it as the transform of the agent if you don't care about a specific area
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        centrePoint  = GameObject.FindGameObjectWithTag("centre").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
+        centrePoint = GameObject.FindGameObjectWithTag("centre").GetComponent<Transform>();
     }
 
 
     void Update()
     {
-        if (agent.remainingDistance <= agent.stoppingDistance) //done with path
-        {
-            Vector3 point;
-            if (RandomPoint(centrePoint.position, range, out point)) //pass in our centre point and radius of area
-            {
-                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                agent.SetDestination(point);
-            }
-        }
+        distance = Vector3.Distance(player.transform.position, transform.position);
+
+       if (agent.remainingDistance <= agent.stoppingDistance && distance >= 2) //done with path
+       {
+                Vector3 point;
+                if (RandomPoint(centrePoint.position, range, out point)) //pass in our centre point and radius of area
+                {
+                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                    agent.SetDestination(point);
+                }
+
+       }
+       else if(distance <= 2)
+       {
+            agent.SetDestination(player.transform.position);
+       }
+
 
     }
     bool RandomPoint(Vector3 center, float range, out Vector3 result)

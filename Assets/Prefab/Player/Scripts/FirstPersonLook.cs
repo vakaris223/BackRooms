@@ -9,6 +9,8 @@ public class FirstPersonLook : MonoBehaviour
 
     Vector2 velocity;
     Vector2 frameVelocity;
+    public bool locked;
+
 
 
     void Reset()
@@ -19,8 +21,9 @@ public class FirstPersonLook : MonoBehaviour
 
     void Start()
     {
-        // Lock the mouse cursor to the game screen.
-        Cursor.lockState = CursorLockMode.Locked;
+        locked = true;
+        
+        
     }
 
     void Update()
@@ -35,5 +38,16 @@ public class FirstPersonLook : MonoBehaviour
         // Rotate camera up-down and controller left-right from velocity.
         transform.localRotation = Quaternion.AngleAxis(-velocity.y, Vector3.right);
         character.localRotation = Quaternion.AngleAxis(velocity.x, Vector3.up);
+
+
+        // Lock the mouse cursor to the game screen.
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else if (!locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }

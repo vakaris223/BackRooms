@@ -39,8 +39,12 @@ public class MazeGenerator : MonoBehaviour
         floor.transform.localScale = new Vector3(mazeSize.x, 0.1f, mazeSize.y);
         floor.transform.position = new Vector3(-0.5f,-0.5f,-0.5f);
         floor.GetComponent<NavMeshSurface>().BuildNavMesh();
+        
+        
+        //Instantiate(Player, new Vector3(0, 1f, 0), Quaternion.identity);
+        
+        //Instantiate(monster, new Vector3(5, 1f, 5), Quaternion.identity);
         StartCoroutine(GeneratMaze(mazeSize));
-
     }
 
     IEnumerator GeneratMaze(Vector2Int size)
@@ -67,7 +71,7 @@ public class MazeGenerator : MonoBehaviour
             }
         }
         
-         Instantiate(monster,  new Vector3(-0.5f,0.5f,-0.5f), Quaternion.identity);
+        
 
         List<MazeNode> currentPathNode = new List<MazeNode>();
         
@@ -79,7 +83,7 @@ public class MazeGenerator : MonoBehaviour
         //currentPathNode[0].SetState(NodeState.Current);
         Instantiate(Player, currentPathNode[0].transform.position, Quaternion.identity);
 
-       
+
 
         while (completedNodes.Count < nodes.Count)
         {
@@ -108,7 +112,6 @@ public class MazeGenerator : MonoBehaviour
                 {
                     possibleDirections.Add(1);
                     possibleNextNodes.Add(currentNodeIndex + size.y);   
-                    
                 }
             }
 
@@ -148,12 +151,15 @@ public class MazeGenerator : MonoBehaviour
                 int chosenDirection = Random.Range(0, possibleDirections.Count);
                 MazeNode chosenNode = nodes[possibleNextNodes[chosenDirection]];
 
+               
+               
 
                 switch (possibleDirections[chosenDirection])
                 {
                     case 1:
                         chosenNode.RemoveWall(1);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(0);
+
                         break;
                     case 2:
                         chosenNode.RemoveWall(0);
@@ -182,7 +188,7 @@ public class MazeGenerator : MonoBehaviour
                 //currentPathNode[currentPathNode.Count - 1].SetState(NodeState.Completed);
 
 
-                if(firstTime)
+                if(firstTime && CountRadio < MaxRadio)
                 {
                     int randomNumber = Random.Range(1, 5);
 
@@ -219,18 +225,14 @@ public class MazeGenerator : MonoBehaviour
             currentNodeXTEXT.text = currentNodeX.ToString();
             currentNodeYTEXT.text = currentNodeY.ToString();
 
-            
 
-            
-
-            yield return null;
+                yield return null;
             
 
 
 
            
         }
-
-
+        Instantiate(monster, new Vector3(5, 0.5f, 5), Quaternion.identity);
     }
 }
