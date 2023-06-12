@@ -10,6 +10,9 @@ TagManager:
   - monster
   - radio
   - locker
+  - frequency
+  - slider
+  - panel
   layers:
   - Default
   - TransparentFX

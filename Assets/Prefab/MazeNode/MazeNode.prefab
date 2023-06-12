@@ -1085,6 +1085,7 @@ MonoBehaviour:
   - {fileID: 2511107958498497446}
   floor: {fileID: 8310097696672067638}
   lamp: {fileID: 0}
+  locker: {fileID: 100002, guid: b7b9112f4651c5341af4f4f45a166e03, type: 3}
 --- !u!1 &8942004033071573318
 GameObject:
   m_ObjectHideFlags: 0

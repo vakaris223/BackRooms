@@ -21,7 +21,7 @@ public class RandomMovement : MonoBehaviour //don't forget to change the script 
         centrePoint = GameObject.FindGameObjectWithTag("centre").GetComponent<Transform>();
     }
 
-
+    
     void Update()
     {
         distance = Vector3.Distance(player.transform.position, transform.position);

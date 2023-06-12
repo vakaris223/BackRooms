@@ -6,6 +6,7 @@ public class playerInteract : MonoBehaviour
 {
     Camera cam;
     public string ObjLooking;
+    public RaycastHit hit;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,7 @@ public class playerInteract : MonoBehaviour
         // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
         //layerMask = ~layerMask;
 
-        RaycastHit hit;
+        
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(cam.transform.position, cam.transform.TransformDirection(Vector3.forward), out hit, 0.6f, layerMask))
         {

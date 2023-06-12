@@ -1279,7 +1279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceThreshold: 0.2
-  isGrounded: 0
+  isGrounded: 1
 --- !u!1 &3272794504061082975
 GameObject:
   m_ObjectHideFlags: 0
@@ -3257,6 +3257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c73ea3edc69aa429c0a595a5b5c06e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjLooking: 
 --- !u!1 &7231818605518397498
 GameObject:
   m_ObjectHideFlags: 0
@@ -4014,6 +4015,7 @@ MonoBehaviour:
   character: {fileID: 6140712418378235154}
   sensitivity: 2
   smoothing: 1.5
+  on: 0
 --- !u!114 &9210757921121632074
 MonoBehaviour:
   m_ObjectHideFlags: 0

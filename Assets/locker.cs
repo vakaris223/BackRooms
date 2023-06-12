@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -7,6 +8,7 @@ public class locker : MonoBehaviour
 {
 
     public Animator anim;
+    public GameObject door;
     public playerInteract key;
     public bool open;
     // Start is called before the first frame update
@@ -14,6 +16,7 @@ public class locker : MonoBehaviour
     {
         open = false;
         anim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -28,8 +31,8 @@ public class locker : MonoBehaviour
             Debug.Log("Player not loaded!");
         }
 
-
-        if(key.ObjLooking == "locker" && Input.GetKeyDown(KeyCode.E))
+        //key.ObjLooking == "locker"
+        if (Input.GetKeyDown(KeyCode.E) && key.hit.collider.gameObject == this.gameObject) ;
         {
             open = !open;
         }

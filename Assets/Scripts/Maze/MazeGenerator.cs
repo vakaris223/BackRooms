@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using System.Linq;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -23,12 +24,16 @@ public class MazeGenerator : MonoBehaviour
 
     [SerializeField] GameObject floor;
     [SerializeField] GameObject monster;
+    [SerializeField] GameObject locker;
 
     //public Transform[] objectsToRotate;
 
     bool firstTime = true;
-    int MaxRadio = 8;
+    int MaxRadio = 1;
     int CountRadio = 0;
+
+    int maxLockers = 8;
+    int Lockers;
 
 
     //[SerializeField] NavigationBaker baker;
@@ -59,10 +64,12 @@ public class MazeGenerator : MonoBehaviour
             {
                 
                 Vector3 nodePos = new Vector3(x - (size.x / 2f), 0, y - (size.y / 2f));// spawns node in center
+                
                 MazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
-                //if (Random.Range(1, 5) == 3)
+                
+                //if (Random.Range(1, 2) == 2)
                 //{
-                //    Instantiate(lamp, new Vector3(nodePos.x, nodePos.y+0.45f, nodePos.z), Quaternion.Euler(0, 0, 180), transform);
+                  //  Instantiate(lamp, new Vector3(nodePos.x, nodePos.y+0.45f, nodePos.z), Quaternion.Euler(0, 0, 180), transform);
                 //}
 
                 nodes.Add(newNode);
@@ -111,8 +118,10 @@ public class MazeGenerator : MonoBehaviour
                 if (!completedNodes.Contains(nodes[currentNodeIndex + size.y]) && !currentPathNode.Contains(nodes[currentNodeIndex + size.y]))
                 {
                     possibleDirections.Add(1);
-                    possibleNextNodes.Add(currentNodeIndex + size.y);   
+                    possibleNextNodes.Add(currentNodeIndex + size.y);
                 }
+
+                
             }
 
             if(currentNodeX > 0)
@@ -122,6 +131,9 @@ public class MazeGenerator : MonoBehaviour
                 {
                     possibleDirections.Add(2);
                     possibleNextNodes.Add(currentNodeIndex - size.y);
+                    
+    
+                    
                 }
             }
             if(currentNodeY < size.y -1)
@@ -160,7 +172,7 @@ public class MazeGenerator : MonoBehaviour
                         chosenNode.RemoveWall(1);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(0);
 
-                        break;
+                            break;
                     case 2:
                         chosenNode.RemoveWall(0);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(1);
@@ -179,6 +191,12 @@ public class MazeGenerator : MonoBehaviour
 
                 //chosenNode.SetState(NodeState.Current);
                 firstTime = true;
+                int randomNumberLocker = Random.Range(1, 5);
+                if (randomNumberLocker == 2)
+                    Instantiate(locker, currentPathNode[currentPathNode.Count - 1].transform);
+
+
+
             }
             else
             {
@@ -214,9 +232,12 @@ public class MazeGenerator : MonoBehaviour
                 RadioCountTEXT.text = CountRadio.ToString();
 
                 currentPathNode.RemoveAt(currentPathNode.Count - 1);
+
+
+               
             }
            
-
+            
             completedNodesTEXT.text = completedNodes.Count.ToString();
             currentPathNodeTEXT.text = currentNodeIndex.ToString();
 

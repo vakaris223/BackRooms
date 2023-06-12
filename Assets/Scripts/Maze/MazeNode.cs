@@ -15,6 +15,8 @@ public class MazeNode : MonoBehaviour
     [SerializeField] MeshRenderer floor;
     //[SerializeField] Material floorMat;
     [SerializeField] GameObject lamp;
+    [SerializeField] GameObject locker;
+
 
     public void RemoveWall(int wallToRemove)
     {
