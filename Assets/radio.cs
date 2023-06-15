@@ -47,11 +47,6 @@ public class radio : MonoBehaviour
         {
             panel.SetActive(false);
         }
-
-
-
-
-
     }
 
     public void exit()
@@ -59,6 +54,4 @@ public class radio : MonoBehaviour
         intr.on = false;
 
     }
-  
-
 }

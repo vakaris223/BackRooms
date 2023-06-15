@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
-using System.Linq;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -14,246 +13,234 @@ public class MazeGenerator : MonoBehaviour
     public Text currentNodeXTEXT;
     public Text currentNodeYTEXT;
     public Text RadioCountTEXT;
+    public Text LockerCountTEXT;
 
     [SerializeField] MazeNode nodePrefab;
     [SerializeField] Vector2Int mazeSize;
 
     [SerializeField] GameObject radio;
-    [SerializeField] GameObject Player;
+    [SerializeField] GameObject player;
     [SerializeField] GameObject lamp;
 
     [SerializeField] GameObject floor;
     [SerializeField] GameObject monster;
-    [SerializeField] GameObject locker;
-
-    //public Transform[] objectsToRotate;
+    [SerializeField] GameObject lockerPrefab;
 
     bool firstTime = true;
-    int MaxRadio = 1;
-    int CountRadio = 0;
+    int maxRadio = 6;
+    int countRadio = 0;
 
     int maxLockers = 8;
-    int Lockers;
-
-
-    //[SerializeField] NavigationBaker baker;
+    int lockers;
 
     private void Start()
     {
-        //create floor and build navMesh
         floor.transform.localScale = new Vector3(mazeSize.x, 0.1f, mazeSize.y);
-        floor.transform.position = new Vector3(-0.5f,-0.5f,-0.5f);
+        floor.transform.position = new Vector3(-0.5f, -0.5f, -0.5f);
         floor.GetComponent<NavMeshSurface>().BuildNavMesh();
-        
-        
-        //Instantiate(Player, new Vector3(0, 1f, 0), Quaternion.identity);
-        
-        //Instantiate(monster, new Vector3(5, 1f, 5), Quaternion.identity);
-        StartCoroutine(GeneratMaze(mazeSize));
+
+        StartCoroutine(GenerateMaze(mazeSize));
     }
 
-    IEnumerator GeneratMaze(Vector2Int size)
+    IEnumerator GenerateMaze(Vector2Int size)
     {
-        List<MazeNode> nodes = new List<MazeNode>();
-
         
-        //create nodes
+        List<MazeNode> nodes = new List<MazeNode>();
+        
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
-                
-                Vector3 nodePos = new Vector3(x - (size.x / 2f), 0, y - (size.y / 2f));// spawns node in center
-                
+               
+                Vector3 nodePos = new Vector3(x - (size.x / 2f), 0, y - (size.y / 2f));
                 MazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
-                
-                //if (Random.Range(1, 2) == 2)
-                //{
-                  //  Instantiate(lamp, new Vector3(nodePos.x, nodePos.y+0.45f, nodePos.z), Quaternion.Euler(0, 0, 180), transform);
-                //}
 
+                //newNode.SetLocker(nodePos + new Vector3(0, -0.45f, 0), Quaternion.Euler(0, 0, 0));
+
+       
                 nodes.Add(newNode);
-                
+
                 yield return null;
             }
         }
-        
+
         
 
-        List<MazeNode> currentPathNode = new List<MazeNode>();
-        
+
+            List<MazeNode> currentPathNode = new List<MazeNode>();
         List<MazeNode> completedNodes = new List<MazeNode>();
-        
 
-        //choose starting node
         currentPathNode.Add(nodes[Random.Range(0, nodes.Count)]);
-        //currentPathNode[0].SetState(NodeState.Current);
-        Instantiate(Player, currentPathNode[0].transform.position, Quaternion.identity);
-
-
+        Instantiate(player, currentPathNode[0].transform.position, Quaternion.identity);
 
         while (completedNodes.Count < nodes.Count)
         {
-
-           
-
-            //Check nodes next to currrent node
             List<int> possibleNextNodes = new List<int>();
-            
             List<int> possibleDirections = new List<int>();
-            
 
             int currentNodeIndex = nodes.IndexOf(currentPathNode[currentPathNode.Count - 1]);
-            
-
-
             int currentNodeX = currentNodeIndex / size.y;
-           
             int currentNodeY = currentNodeIndex % size.y;
-            
 
+            // Check Node to the ***RIGHT*** of the current node
             if (currentNodeX < size.x - 1)
             {
-                // Check Node to the ***RIGHT*** of the current node
                 if (!completedNodes.Contains(nodes[currentNodeIndex + size.y]) && !currentPathNode.Contains(nodes[currentNodeIndex + size.y]))
                 {
                     possibleDirections.Add(1);
                     possibleNextNodes.Add(currentNodeIndex + size.y);
+                    //nodes[currentNodeIndex + size.y].SpawnLocker(LockerPos.PosX);
                 }
-
-                
             }
-
-            if(currentNodeX > 0)
+            // Check Node to the ***LEFT*** of the current node
+            if (currentNodeX > 0)
             {
-                // Check Node to the ***LEFT*** of the current node
                 if (!completedNodes.Contains(nodes[currentNodeIndex - size.y]) && !currentPathNode.Contains(nodes[currentNodeIndex - size.y]))
                 {
                     possibleDirections.Add(2);
                     possibleNextNodes.Add(currentNodeIndex - size.y);
-                    
-    
-                    
+                    //nodes[currentNodeIndex - size.y].SpawnLocker(LockerPos.NegX);
                 }
             }
-            if(currentNodeY < size.y -1)
+            // Check Node to the ***UP*** of the current node
+            if (currentNodeY < size.y - 1)
             {
-                // Check Node to the ***ABOVE*** of the current node
-                if(!completedNodes.Contains(nodes[currentNodeIndex + 1]) && !currentPathNode.Contains(nodes[currentNodeIndex + 1 ]))
+                if (!completedNodes.Contains(nodes[currentNodeIndex + 1]) && !currentPathNode.Contains(nodes[currentNodeIndex + 1]))
                 {
                     possibleDirections.Add(3);
-                    possibleNextNodes.Add(currentNodeIndex +1 );
+                    possibleNextNodes.Add(currentNodeIndex + 1);
+                    //nodes[currentNodeIndex + 1].SpawnLocker(LockerPos.PosY);
                 }
             }
-
+            // Check Node to the ***DOWN*** of the current node
             if (currentNodeY > 0)
             {
-                // Check Node to the ***BELLOW*** of the current node
                 if (!completedNodes.Contains(nodes[currentNodeIndex - 1]) && !currentPathNode.Contains(nodes[currentNodeIndex - 1]))
                 {
                     possibleDirections.Add(4);
                     possibleNextNodes.Add(currentNodeIndex - 1);
+                    //nodes[currentNodeIndex - 1].SpawnLocker(LockerPos.NegY);
                 }
             }
+
             possibleNextNodesTEXT.text = possibleNextNodes.Count.ToString();
             possibleDirectionsTEXT.text = possibleDirections.Count.ToString();
-            //Choose next node
-            if (possibleDirections.Count>0)
+
+            if (possibleDirections.Count > 0)
             {
                 int chosenDirection = Random.Range(0, possibleDirections.Count);
                 MazeNode chosenNode = nodes[possibleNextNodes[chosenDirection]];
 
-               
-               
-
                 switch (possibleDirections[chosenDirection])
                 {
-                    case 1:
+                    case 1: //right
                         chosenNode.RemoveWall(1);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(0);
-
-                            break;
-                    case 2:
+                        
+                        
+                        break;
+                    case 2: // Left
                         chosenNode.RemoveWall(0);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(1);
+                        
                         break;
-                    case 3:
+                        
+
+                    case 3: // Above
                         chosenNode.RemoveWall(3);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(2);
+                        
                         break;
-                    case 4:
+
+                    case 4: // Below
                         chosenNode.RemoveWall(2);
                         currentPathNode[currentPathNode.Count - 1].RemoveWall(3);
+                        
                         break;
                 }
 
                 currentPathNode.Add(chosenNode);
-
-                //chosenNode.SetState(NodeState.Current);
+                
                 firstTime = true;
-                int randomNumberLocker = Random.Range(1, 5);
-                if (randomNumberLocker == 2)
-                    Instantiate(locker, currentPathNode[currentPathNode.Count - 1].transform);
 
-
+                //locker
+                /*int randomNumberLocker = Random.Range(1, 5);
+                if (randomNumberLocker == 2 && lockers < maxLockers)
+                {
+                    Quaternion lockerRotation = Quaternion.LookRotation(Vector3.left);
+                    Vector3 lockerPos = new Vector3(0, -0.45f, 0);
+                    Instantiate(lockerPrefab, lockerPos, lockerRotation);
+                    lockers++;
+                }*/
+                //locker@
+                
 
             }
             else
             {
-                
                 completedNodes.Add(currentPathNode[currentPathNode.Count - 1]);
 
-                //currentPathNode[currentPathNode.Count - 1].SetState(NodeState.Completed);
-
-
-                if(firstTime && CountRadio < MaxRadio)
+                if (firstTime && countRadio < maxRadio)
                 {
                     int randomNumber = Random.Range(1, 5);
 
-
-                    if(randomNumber == 2)
+                    if (randomNumber == 2)
                     {
-                        Instantiate
-                        (
-                                radio, 
-                                new Vector3
-                                (currentPathNode[currentPathNode.Count - 1].transform.position.x-0.3f,
-                                currentPathNode[currentPathNode.Count - 1].transform.position.y-0.45f,
-                                currentPathNode[currentPathNode.Count - 1].transform.position.z+0.3f), 
-                                Quaternion.Euler(-90, 0, -30)
-                        );
-                        CountRadio += 1;
+                        Instantiate(radio, new Vector3(currentPathNode[currentPathNode.Count - 1].transform.position.x - 0.3f, currentPathNode[currentPathNode.Count - 1].transform.position.y - 0.45f, currentPathNode[currentPathNode.Count - 1].transform.position.z + 0.3f), Quaternion.Euler(-90, 0, -30));
+                        countRadio++;
                     }
-                    
-                    
-                    
+
                     firstTime = false;
                 }
-                RadioCountTEXT.text = CountRadio.ToString();
+
+                RadioCountTEXT.text = countRadio.ToString();
+
+
+                int randomNumberLocker = Random.Range(1, 10);
+                //if(randomNumberLocker == 5)
+                //{
+                    for (int i = 0; i < currentPathNode[currentPathNode.Count - 1].wallGet().Length; i++)
+                    {
+                        if (currentPathNode[currentPathNode.Count - 1].wallGet()[i].name == "PosXWall" && randomNumberLocker == 9)
+                        {
+                            currentPathNode[currentPathNode.Count - 1].SpawnLocker(LockerPos.PosX);
+                        }
+
+                        if (currentPathNode[currentPathNode.Count - 1].wallGet()[i].name == "NegXWall" && randomNumberLocker == 3)
+                        {
+                            currentPathNode[currentPathNode.Count - 1].SpawnLocker(LockerPos.NegX);
+                        }
+
+                        if (currentPathNode[currentPathNode.Count - 1].wallGet()[i].name == "PosZWall" && randomNumberLocker == 7)
+                        {
+                            currentPathNode[currentPathNode.Count - 1].SpawnLocker(LockerPos.PosY);
+                        }
+
+                        if (currentPathNode[currentPathNode.Count - 1].wallGet()[i].name == "NegZWall" && randomNumberLocker == 1)
+                        {
+                            currentPathNode[currentPathNode.Count - 1].SpawnLocker(LockerPos.NegY);
+                        }
+                    }
+                //}
+                
+
 
                 currentPathNode.RemoveAt(currentPathNode.Count - 1);
 
-
-               
             }
+
            
-            
+
+
             completedNodesTEXT.text = completedNodes.Count.ToString();
             currentPathNodeTEXT.text = currentNodeIndex.ToString();
-
-
-
             currentNodeXTEXT.text = currentNodeX.ToString();
             currentNodeYTEXT.text = currentNodeY.ToString();
+            LockerCountTEXT.text = lockers.ToString();
 
-
-                yield return null;
-            
-
-
-
-           
+            yield return null;
         }
+
         Instantiate(monster, new Vector3(5, 0.5f, 5), Quaternion.identity);
     }
 }

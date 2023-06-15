@@ -31,7 +31,7 @@ public class radioInterct : MonoBehaviour
             Debug.Log("Player not loaded!");
         }
 
-        if (key.ObjLooking == "radio" && Input.GetKeyDown(KeyCode.E))
+        if (key.hit.collider.gameObject == this.gameObject && Input.GetKeyDown(KeyCode.E))
         {
             on = !on;
             player.isKinematic = true;

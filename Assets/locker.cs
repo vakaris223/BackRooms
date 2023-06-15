@@ -7,18 +7,17 @@ using UnityEngine.Animations;
 public class locker : MonoBehaviour
 {
 
-    public Animator anim;
-    public GameObject door;
-    public playerInteract key;
+    private Animator anim;
+    private playerInteract key;
     public bool open;
+    private GameObject door;
     // Start is called before the first frame update
     void Start()
     {
         open = false;
         anim = GetComponent<Animator>();
-        
+        door = gameObject.transform.GetChild(0).gameObject;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -32,23 +31,21 @@ public class locker : MonoBehaviour
         }
 
         //key.ObjLooking == "locker"
-        if (Input.GetKeyDown(KeyCode.E) && key.hit.collider.gameObject == this.gameObject) ;
+        if (Input.GetKeyDown(KeyCode.E) && key.hit.collider.gameObject == this.gameObject )
+        {
+            open = !open;
+        }
+        else if(Input.GetKeyDown(KeyCode.E) && key.hit.collider.gameObject == door)
         {
             open = !open;
         }
 
+       
 
         if (open)
             anim.SetBool("open", true);
         else if (!open)
             anim.SetBool("open", false);
-
-
-
-
-
-
-
 
 
     }
