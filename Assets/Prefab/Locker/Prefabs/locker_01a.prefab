@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 7206119498672229800}
   - component: {fileID: 7459733011320380138}
   - component: {fileID: 3337301412333869749}
+  - component: {fileID: 8798714880471428671}
   m_Layer: 9
   m_Name: locker_01a
   m_TagString: locker
@@ -232,6 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   open: 0
+  monster: {fileID: 0}
 --- !u!208 &3337301412333869749
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -248,3 +250,16 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.91800004, z: 0}
   m_TimeToStationary: 0.5
+--- !u!65 &8798714880471428671
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.42803475, y: 0.57626176, z: 0.36470258}
+  m_Center: {x: -0.0066166366, y: 0.40112084, z: -0.11379064}

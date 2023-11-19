@@ -26,12 +26,16 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] GameObject monster;
     [SerializeField] GameObject lockerPrefab;
 
+    public bool done = false;
+
     bool firstTime = true;
-    int maxRadio = 6;
-    int countRadio = 0;
+    int maxRadio = 5;
+    public int countRadio = 0;
 
     int maxLockers = 8;
     int lockers;
+
+    bool firstTimeM = true;
 
     private void Start()
     {
@@ -49,6 +53,7 @@ public class MazeGenerator : MonoBehaviour
         
         for (int x = 0; x < size.x; x++)
         {
+           
             for (int y = 0; y < size.y; y++)
             {
                
@@ -56,12 +61,17 @@ public class MazeGenerator : MonoBehaviour
                 MazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
 
                 //newNode.SetLocker(nodePos + new Vector3(0, -0.45f, 0), Quaternion.Euler(0, 0, 0));
+                if(y % 2 == 0 && x % 2 == 0)
+                {
+                    newNode.SetLamp(nodePos + new Vector3(0, 0.45f, 0));
+                }
+                
 
-       
                 nodes.Add(newNode);
 
                 yield return null;
             }
+            
         }
 
         
@@ -179,18 +189,23 @@ public class MazeGenerator : MonoBehaviour
             else
             {
                 completedNodes.Add(currentPathNode[currentPathNode.Count - 1]);
-
+                
                 if (firstTime && countRadio < maxRadio)
                 {
-                    int randomNumber = Random.Range(1, 5);
-
-                    if (randomNumber == 2)
+                    if (Random.Range(1, 5) == 1)
                     {
-                        Instantiate(radio, new Vector3(currentPathNode[currentPathNode.Count - 1].transform.position.x - 0.3f, currentPathNode[currentPathNode.Count - 1].transform.position.y - 0.45f, currentPathNode[currentPathNode.Count - 1].transform.position.z + 0.3f), Quaternion.Euler(-90, 0, -30));
+                        Instantiate(radio, new Vector3(currentPathNode[currentPathNode.Count - 1].transform.position.x - 0.3f, currentPathNode[currentPathNode.Count - 1].transform.position.y - 0.45f, currentPathNode[currentPathNode.Count - 1].transform.position.z + 0.3f), Quaternion.Euler(-90, 0, 0));
                         countRadio++;
                     }
 
                     firstTime = false;
+                }
+
+                
+                if (firstTimeM)
+                {
+                    Instantiate(monster, new Vector3(currentPathNode[currentPathNode.Count - 1].transform.position.x - 0.3f, currentPathNode[currentPathNode.Count - 1].transform.position.y - 0.45f, currentPathNode[currentPathNode.Count - 1].transform.position.z + 0.3f), Quaternion.identity);
+                    firstTimeM = false;
                 }
 
                 RadioCountTEXT.text = countRadio.ToString();
@@ -238,9 +253,10 @@ public class MazeGenerator : MonoBehaviour
             currentNodeYTEXT.text = currentNodeY.ToString();
             LockerCountTEXT.text = lockers.ToString();
 
+            
             yield return null;
         }
 
-        Instantiate(monster, new Vector3(5, 0.5f, 5), Quaternion.identity);
+        done = true;
     }
 }

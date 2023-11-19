@@ -13,6 +13,7 @@ TagManager:
   - frequency
   - slider
   - panel
+  - interact
   layers:
   - Default
   - TransparentFX
